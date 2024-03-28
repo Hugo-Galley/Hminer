@@ -1,0 +1,1 @@
+miner.exe --algo 125_4 --server zel.2miners.com --port 9090 --user azerth.zerty --pass x
