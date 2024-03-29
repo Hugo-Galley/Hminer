@@ -1,40 +1,47 @@
 import subprocess
 import customtkinter as ctk
 import os
-import platform
 
+# Défnitions de la fenetre et de ses caracteritqiues
 windows = ctk.CTk()
 windows.title('Mineur')
 windows.geometry('700x500')
 windows.maxsize(700,500)
 windows.minsize(700,500)
 
+# Verification de l'OS pour savoir si c'est un Windows ('posix' ca raporte a tour les sytemes sous UNIX tel que MacOS ou Linux)
 if os.name == "posix":
     no_compatibilte = ctk.CTkLabel(windows,text="Désoler mais votre OS n'est pas fait pour miner. \n Veuillez utilisez Windows",font=('Courrier',20)).pack(expand=ctk.YES)
     windows.mainloop()
 
+# Fonction de lancment du bon fichier de minage de crypto
 def miner_launch(choix_crypto, adress, nom):
     global filedir
+    # Verification de la presence d'un GPU sur la machine
     try:
         result = subprocess.run(['wmic', 'path', 'win32_videocontroller', 'get', 'name'], capture_output=True, text=True)
 
-
+        # Choix du dossier de travail en fonction de la marque du GPU récuperer plus haut
         if 'NVIDIA' in result.stdout.upper():
             workdir = os.path.join(os.path.dirname(__file__), 'Setup/NVIDIA')
         elif 'AMD' in result.stdout.upper():
             workdir = os.path.join(os.path.dirname(__file__), 'Setup/AMD')
         elif 'INTEL' in result.stdout.upper():
-            windows.destroy()
+            workdir = os.path.join(os.path.dirname(__file__), 'Setup/NVIDIA')
         else:
             return False
     except Exception as e:
-        print(e)
-        return False
+        frame_lancement.pack_forget()
+        label_not_GPU = (ctk.CTkLabel(windows,text='Vous ne pouvez pas miner car vous ne possedez pas de GPU'))
+        label_not_GPU.pack(pady=15)
 
 
+    # Deetection de la crypto choisis
     if choix_crypto == 'Ethereum Classic':
+        # Création du chemin absolue du fichier d'execution
         filedir = os.path.join(workdir, 'etc-pool.bat')
         with open(filedir, 'w') as f:
+            # Ecriture de la ligne de commande pour lancer le miner avec les infos personalisé
             f.write(f'miner.exe --algo etchash --server etc.2miners.com:1010 --user {adress} \n pause')
 
     if choix_crypto == 'RavenCoin':
@@ -55,6 +62,7 @@ def miner_launch(choix_crypto, adress, nom):
     subprocess.run(['start', 'cmd', '/k', filedir], shell=True, cwd=os.path.dirname(filedir))
 
 def launch():
+    # Verifie que aucun champs n'est vide sinon affiche une erreur
     if choix_crypto.get() == "" or adresse.get() == "" or nom.get() == "":
         label_no_complete = ctk.CTkLabel(frame_lancement,text='Veuillez remplire tout les champs')
         label_no_complete.pack(pady=15)
