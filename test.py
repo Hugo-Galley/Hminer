@@ -1,17 +1,18 @@
+import re
 
+def verifier_adresse_ethereum(adresse):
+    # Expression régulière pour vérifier le format d'une adresse Ethereum
+    regex_adresse_ethereum = r'^0x[a-fA-F0-9]{40}$'
 
-import subprocess
-def detect_GPU():
-    try:
-        result = subprocess.run(['wmic', 'path', 'win32_videocontroller', 'get', 'name'], capture_output=True,
-                                text=True)
-
-        if 'NVIDIA' in result.stdout.upper() or 'AMD' in result.stdout.upper() or result.stdout.upper():
-            print(result)
-            return True
-        else:
-            return False
-    except Exception as e:
-        print(e)
+    # Vérifier si l'adresse correspond au format attendu
+    if re.match(regex_adresse_ethereum, adresse):
+        return True
+    else:
         return False
-print(detect_GPU())
+
+# Exemple d'utilisation
+adresse_test = "0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5"
+if verifier_adresse_ethereum(adresse_test):
+    print("L'adresse Ethereum est au format valide.")
+else:
+    print("L'adresse Ethereum n'est pas au format valide.")
