@@ -20,7 +20,7 @@ pip install customtkinter
 ## Appercu
 ### Interface Utilisateurs 
 
-[ScreenShot Interface Utilisateur](Assets/Screen1.png)
+![Capture d'écran de l'interface utilisateur](Assets/Screen1.png)
 
 ## Avertissement :warning:
 
