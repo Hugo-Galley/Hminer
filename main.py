@@ -37,29 +37,33 @@ def miner_launch(choix_crypto, adress, nom):
 
 
     # Deetection de la crypto choisis
-    if choix_crypto == 'Ethereum Classic':
-        # Création du chemin absolue du fichier d'execution
-        filedir = os.path.join(workdir, 'etc-pool.bat')
-        with open(filedir, 'w') as f:
-            # Ecriture de la ligne de commande pour lancer le miner avec les infos personalisé
-            f.write(f'miner.exe --algo etchash --server etc.2miners.com:1010 --user {adress} \n pause')
 
-    if choix_crypto == 'RavenCoin':
-        filedir = os.path.join(workdir, 'rvn-pool.bat')
-        with open(filedir, 'w') as f:
-            f.write(f'miner.exe --algo kawpow --server rvn.2miners.com:6060 --user {adress}.{nom} \n pause')
+    match choix_crypto :
 
-    if choix_crypto == "Flux":
-        filedir = os.path.join(workdir, 'flux-pool.bat')
-        with open(filedir, 'w') as f:
-            f.write(f'miner.exe --algo 125_4 --server zel.2miners.com --port 9090 --user {adress}.{nom} --pass x \n pause')
-    if choix_crypto == "Grin":
-        filedir = os.path.join(workdir, 'grin-pool.bat')
-        with open(filedir, 'w') as f:
-            f.write(f'..\AMD\lolMiner.exe --coin GRIN-C32 --pool grin.2miners.com:3030 --user {adress}.{nom} --pass x \n pause')
+        case "Ethereum Classic":
+            # Création du chemin absolue du fichier d'execution
+            filedir = os.path.join(workdir, 'etc-pool.bat')
+            with open(filedir, 'w') as f:
+                # Ecriture de la ligne de commande pour lancer le miner avec les infos personalisé
+                f.write(f'miner.exe --algo etchash --server etc.2miners.com:1010 --user {adress} \n pause')
+        case "RavenCoin":
+            filedir = os.path.join(workdir, 'rvn-pool.bat')
+            with open(filedir, 'w') as f:
+                f.write(f'miner.exe --algo kawpow --server rvn.2miners.com:6060 --user {adress}.{nom} \n pause')
+        case "Flux":
+            filedir = os.path.join(workdir, 'flux-pool.bat')
+            with open(filedir, 'w') as f:
+                f.write(f'miner.exe --algo 125_4 --server zel.2miners.com --port 9090 --user {adress}.{nom} --pass x \n pause')
+        case "Grin":
+            filedir = os.path.join(workdir, 'grin-pool.bat')
+            with open(filedir, 'w') as f:
+                f.write(
+                    f'..\AMD\lolMiner.exe --coin GRIN-C32 --pool grin.2miners.com:3030 --user {adress}.{nom} --pass x \n pause')
+
 
     # Exécuter le fichier .bat après l'avoir fermé
     subprocess.run(['start', 'cmd', '/k', filedir], shell=True, cwd=os.path.dirname(filedir))
+
 
 def launch():
     # Verifie que aucun champs n'est vide sinon affiche une erreur
